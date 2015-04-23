@@ -59,6 +59,7 @@ var genEnum = function(key) {
     for (var i0 = 0; i0 < j; ++i0) {
       var fn0 = isFuncs[i0];
       ret[k][fn0] = function() {
+        console.log(this);
         return fn0 == fn;
       }
     }
