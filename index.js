@@ -54,20 +54,16 @@ var genEnum = function(key) {
     ret[k] = {_id: k};
     isFuncs.push(fn);
   }
-  for (var i = 0, j = keys.length; i < j; ++i) {
-    var k = keys[i], fn = getIsFuncName(k);
-    for (var i0 = 0; i0 < j; ++i0) {
-      var fn0 = isFuncs[i0];
-      ret[k][fn0] = function() {
-        console.log(this);
-        return fn0 == fn;
+  _.forEach(ret, function(en, key) {
+    en['toString'] = function() {return en._id;}
+    en['name'] = en['toString'];
+    en['__is_fun_nm__'] = getIsFuncName(en._id);
+    _.forEach(isFuncs, function(fn) {
+      en[fn] = function() {
+        return fn == en['__is_fun_nm__'];
       }
-    }
-    ret[k]["toString"] = function() {
-      return ret[k]._id;
-    }
-    ret[k]["name"] = ret[k]["toString"];
-  }
+    })
+  })
   return ret;
 };
 
