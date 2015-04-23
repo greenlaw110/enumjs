@@ -6,7 +6,7 @@
  *
  * For example:
  *
- *   var COLORS = enum("blue red green");
+ *   var COLORS = genEnum("blue red green");
  *   var myColor = COLORS.blue;
  *   console.log(myColor._id); // output 'blue'
  *   console.log(myColor.name()); // output 'blue'
@@ -22,10 +22,10 @@
 var _ = require('lodash');
 
 function getIsFuncName(k) {
-  return "is" + _.camelCase(_.capitalize(k));
+  return "is" + _.capitalize(_.camelCase(k));
 }
 
-var createEnum = function(key) {
+var genEnum = function(key) {
   var ret = {};
   var keys = [];
   if (_.isArray(key)) {
@@ -45,7 +45,7 @@ var createEnum = function(key) {
   } else if (!_.isString(key)) {
     throw new Error('Argument must be a string or an array of strings.');
   } else {
-    keys = _.words(key);
+    keys = key.split(/[,;:\s]+/);
   }
 
   var isFuncs = [];
@@ -70,4 +70,4 @@ var createEnum = function(key) {
   return ret;
 };
 
-module.exports = createEnum;
+module.exports = genEnum;
