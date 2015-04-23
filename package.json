@@ -1,6 +1,6 @@
 {
-  "name": "GenEnum",
-  "id": "genEnum",
+  "name": "gen_enum",
+  "id": "gen_enum",
   "version": "0.0.1",
   "description": "A simple utility for generating an enum object with a string contains enum keys",
   "keywords": [ "enum" ],

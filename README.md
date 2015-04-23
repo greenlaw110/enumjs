@@ -8,10 +8,10 @@ I thought `keyMirror` was useful and wanted to extends the function
 Usage
 -----
 
-`npm install genEnum`
+`npm install gen_enum`
 
 ```javascript
-var createEnum = require('genEnum');
+var createEnum = require('gen_enum');
 var COLORS = createEnum("blue red");
 var myColor = COLORS.blue;
 console.log(myColor._id); // output blue
