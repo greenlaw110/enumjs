@@ -1,0 +1,22 @@
+{
+  "name": "genEnum",
+  "version": "0.0.1",
+  "description": "A simple utility for generating an enum object with a string contains enum keys",
+  "main": "index.js",
+  "author": "Gelin Luo <greenlaw110@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/greenlaw110/enumjs"
+  },
+  "license": "APL-v2",
+  "bugs": {
+    "url": "https://github.com/greenlaw110/enumjs/issues"
+  },
+  "homepage": "https://github.com/greenlaw110/enumjs",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "enum"
+  ]
+}
