@@ -1,18 +1,17 @@
-EnumJS
-=========
+GenEnum
+========
 
 Create an enum object with key names specified in String or object
 
 I thought `keyMirror` was useful and wanted to extends the function
 
-
 Usage
 -----
 
-`npm install enumjs`
+`npm install genEnum`
 
 ```javascript
-var createEnum = require('enumjs');
+var createEnum = require('genEnum');
 var COLORS = createEnum("blue red");
 var myColor = COLORS.blue;
 console.log(myColor._id); // output blue
