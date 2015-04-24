@@ -22,7 +22,7 @@ module.exports = AppMode;
 And then we can reference to the `AppMode` enum in our JS code:
 
 ```javascript
-var AppMode = require(../const/app_mode);
+var AppMode = require('../const/app_mode');
 
 ...
 if (curMode == AppMode.LOG_IN) {
@@ -37,7 +37,7 @@ var className = (curMode == AppMode.LOG_IN) ? 'login-form' : 'signup-form';
 
 ```
 
-So far it looks all good. However I found it's quite often that I use things like `curMode == AppMode.LOG_IN`, I want to make it easier to use, something like `curMode.isLogIn()`. And hence here come up with this `gen_enum` utility
+So far it looks all good. However I found it's quite often that I use things like `curMode == AppMode.LOG_IN` and it always require me to `require('../const/app_mode')`, I want to make it easier to use, something like `curMode.isLogIn()` should be cool. And hence here come up with this `gen_enum` utility
 
 Usage
 -----
