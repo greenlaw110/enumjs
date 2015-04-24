@@ -38,7 +38,7 @@ var genEnum = function(key) {
     }
   } else if (key instanceof Object && !Array.isArray(key)) {
     for (k in key) {
-      if (obj.hasOwnProperty(k)) {
+      if (key.hasOwnProperty(k)) {
         keys.push(k)
       }
     }

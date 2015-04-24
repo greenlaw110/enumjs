@@ -1,7 +1,7 @@
 {
   "name": "gen_enum",
   "id": "gen_enum",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "A simple utility for generating an enum object with a string contains enum keys",
   "keywords": [ "enum" ],
   "author": "Gelin Luo <greenlaw110@gmail.com>",
