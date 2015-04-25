@@ -45,8 +45,8 @@ Usage
 `npm install gen_enum`
 
 ```javascript
-var createEnum = require('gen_enum');
-var COLORS = createEnum("blue red");
+var genEnum = require('gen_enum');
+var COLORS = genEnum("blue red");
 var myColor = COLORS.blue;
 console.log(myColor._id); // output blue
 console.log(myColor.isBlue()); //output true
@@ -57,11 +57,11 @@ console.log(myColor.toString()); //output blue
 
 Input:  `"key1 key2 ..."`
 
-Note keys could be separated by `space`, `,`, `;` and `:`
+Note, other than `space`, keys could also be separated by `,`, `;` and `:`
 
 Output: 
 
-```
+```json
 {
     key1: {
         _id: 'key1',
@@ -104,8 +104,12 @@ Instead of a string of keys sepated by separators specified above, it can use an
 ```javascript
 
 // use array of strings to specify keys
-var Color = genEnum("blue", "red");
+var Color = genEnum(["blue", "red"]);
 var myColor = Color.blue;
+
+// use arguments array to specify keys
+var BuildTool = genEnum("gulp", "grunt");
+var myTool = BuildTool.gulp;
 
 // use object to specify keys
 var WeekDay = genEnum({
@@ -128,5 +132,13 @@ console.log(curMode.isSignUp()); // output false
 console.log(curMode.isForgotPassword()); // output false
 ```
 
+
+Immutatibility
+---------------
+
+`gen_enum` tried to use `Object.freeze()` to make the enum object be immutabile. If your environment doesn't support `Object.freeze()`, e.g. IE 8 or before, you can still use `gen_enum`, but the object returned is not immutable.
+
+Dependencies
+--------------
 
 This module depends on `lodash`
