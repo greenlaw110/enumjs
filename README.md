@@ -61,7 +61,7 @@ Note, other than `space`, keys could also be separated by `,`, `;` and `:`
 
 Output: 
 
-```json
+```javascript
 {
     key1: {
         _id: 'key1',
