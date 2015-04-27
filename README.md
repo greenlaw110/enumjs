@@ -141,7 +141,7 @@ Immutatibility
 Limits
 ----------
 
-The object created by `gen_enum` won't survive `JSON` `stringify`/`parse` cicle as all the method associated with the object has been lost after `JSON.parse`. If you do need enum definition that needs to run across JSON serialize/deserialize, please try https://www.npmjs.com/package/gen_const 
+The object created by `gen_enum` won't survive `JSON` `stringify`/`parse` cicle as all the methods associated with the object has been lost after `JSON.parse`. If you do need enum definition that needs to run across JSON serialize/deserialize, please try https://www.npmjs.com/package/gen_const 
 
 Dependencies
 --------------
