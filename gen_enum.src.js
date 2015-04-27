@@ -107,7 +107,7 @@ var genEnum = function(key) {
   var keys = [];
   if (arguments.length > 1) {
     keys = keysFromArray(arguments);
-  } else if (_.isArray(key)) {
+  } else if (isArray(key)) {
     keys = keysFromArray(key);
   } else if (isObject(key)) {
     keys = keysFromObject(key);

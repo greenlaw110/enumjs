@@ -41,6 +41,7 @@
     "should": "*",
     "gulp-rename": "*",
     "gulp-replace": "*",
-    "del": "*"
+    "del": "*",
+    "JSON": "*"
   }
 }

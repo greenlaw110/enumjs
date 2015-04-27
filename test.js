@@ -1,5 +1,6 @@
 var assert = require('assert');
 var should = require('should');
+var JSON = require('JSON');
 var genEnum = require('../TESTSRC');
 
 describe('genEnum', function() {
@@ -111,5 +112,20 @@ describe('genEnum', function() {
     });
 
   });
+
+  // describe('JSON Serialize/Deserialize', function() {
+
+  //   it('should be working after JSON serialize', function() {
+  //     var s = JSON.stringify(MyEnum.Key1);
+  //     var Key1 = JSON.parse(s);
+
+  //     assert.equal('Key1', Key1._id);
+  //     assert.equal('Key1', Key1.name());
+  //     assert.equal('Key1', Key1.toString());
+  //     assert.equal(true, Key1.isKey1());
+  //     assert.equal(false, Key1.isKey2());
+  //   })
+
+  // })
 
 });

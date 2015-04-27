@@ -48,7 +48,7 @@ gulp.task('test-prepare', ['clean-test'], function() {
 
 gulp.task('mocha', function() {
   return gulp.src(test_path + '/' + test_file, {read: false})
-    .pipe(mocha());
+    .pipe(mocha({reporter: 'dot'}));
 })
 
 gulp.task('test', ['test-prepare', 'mocha']);

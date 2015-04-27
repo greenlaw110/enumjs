@@ -138,6 +138,11 @@ Immutatibility
 
 `gen_enum` tried to use `Object.freeze()` to make the enum object be immutabile. If your environment doesn't support `Object.freeze()`, e.g. IE 8 or before, you can still use `gen_enum`, but the object returned is not immutable.
 
+Limits
+----------
+
+The object created by `gen_enum` won't survive `JSON` `stringify`/`parse` cicle as all the method associated with the object has been lost after `JSON.parse`. If you do need enum definition that needs to run across JSON serialize/deserialize, please try https://www.npmjs.com/package/gen_const 
+
 Dependencies
 --------------
 
