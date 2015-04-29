@@ -82,23 +82,30 @@ function buildEnum(keys, theEnum, isFuncs) {
   }
 }
 
-function extendIsFuncsToEnum(theEnum, isFuncs) {
+function extendIsFuncsToEnum(theEnum, isFuncs, serializable) {
   _.forEach(theEnum, function(en, key) {
-    en.toString = function() {return en._id;};
-    en.name = en.toString;
-    en.__is_fun_nm__ = getIsFuncName(en._id);
-    _.forEach(isFuncs, function(fn) {
-      en[fn] = function() {
-        return fn === en.__is_fun_nm__;
-      };
-    });
+    extendIsFuncsToEnumItem(en, isFuncs, serializable);
+  });
+}
+
+function extendIsFuncsToEnumItem(en, isFuncs, serializable) {
+  en.toString = function() {return en._id;};
+  en.name = en.toString;
+  en.__is_func_nm__ = getIsFuncName(en._id);
+  if (serializable) {
+    en.__is_func_list__ = isFuncs;
+  }
+  _.forEach(isFuncs, function(fn) {
+    en[fn] = function() {
+      return fn === en.__is_func_nm__;
+    };
   });
 }
 
 function freeze(theEnum) {
-  try {
+  if (Object && Object.freeze) {
     return Object.freeze(theEnum);
-  } catch (e) {
+  } else {
     return theEnum;
   }
 }
@@ -119,9 +126,108 @@ var genEnum = function(key) {
 
   var theEnum = {}, isFuncs = [];
   buildEnum(keys, theEnum, isFuncs);
-  extendIsFuncsToEnum(theEnum, isFuncs);
+  extendIsFuncsToEnum(theEnum, isFuncs, true);
 
   return freeze(theEnum);
 };
 
-module.exports = genEnum;
+var genConst = function(key) {
+  var keys = [];
+  if (arguments.length > 1) {
+    keys = keysFromArray(arguments);
+  } else if (isArray(key)) {
+    keys = keysFromArray(key);
+  } else if (isObject(key)) {
+    keys = keysFromObject(key);
+  } else if (isString(key)) {
+    keys = keysFromString(key);
+  } else {
+    throw new Error('Argument must be a string or an array of strings.');
+  }
+
+  var theConst = {};
+  for (var i = 0, j = keys.length; i < j; ++i) {
+    var k = keys[i];
+    theConst[k] = k;
+  }
+
+  return freeze(theConst);
+};
+
+var genBitmap = function(key) {
+  var keys = [], defVal = false, theObj = false;
+  if (arguments.length > 1) {
+    if (typeof arguments[0] === 'boolean') {
+      defVal = arguments[0];
+      var args = [];
+      Array.prototype.push.apply(args, arguments);
+      args.shift();
+      if (args.length == 1) {
+        key = args[0];
+        if (isString(key)) {
+          keys = keysFromString(key);
+        } else if (isObject(key)) {
+          theObj = key;
+          keys = keysFromObject(key);
+        } else if (isArray(key)) {
+          keys = keysFromArray(key);
+        } else {
+          throw new Error('Argument must be a string or an array of strings.');
+        }
+      } else {
+        keys = keysFromArray(args);
+      }
+    } else {
+      keys = keysFromArray(arguments);
+    }
+  } else if (isArray(key)) {
+    keys = keysFromArray(key);
+  } else if (isObject(key)) {
+    theObj = key;
+    keys = keysFromObject(key);
+  } else if (isString(key)) {
+    keys = keysFromString(key);
+  } else {
+    throw new Error('Argument must be a string or an array of strings.');
+  }
+
+  var theBitmap = {};
+  for (var i = 0, j = keys.length; i < j; ++i) {
+    var k = keys[i];
+    if (theObj && typeof theObj[k] === 'boolean') {
+      theBitmap[k] = theObj[k]; 
+    } else {
+      theBitmap[k] = defVal;
+    }
+  }
+
+  return freeze(theBitmap);
+};
+
+
+var _unJSON = function(v) {
+  if (v && v._id && v.__is_func_list__ && v.__is_func_nm__) {
+    extendIsFuncsToEnumItem(v, v.__is_func_list__, true);
+  } else if (isObject(v)) {
+    for (var k in v) {
+      if (v.hasOwnProperty(k)) {
+        _unJSON(v[k]);
+      }
+    }
+  }
+}
+
+var unJSON = function(v) {
+  if (typeof(v) === 'string') {
+    v = JSON.parse(v);
+  }
+  _unJSON(v);
+  return v;
+};
+
+module.exports = {
+  enum: genEnum,
+  const: genConst,
+  bitmap: genBitmap,
+  unJSON: unJSON
+};

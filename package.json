@@ -1,7 +1,7 @@
 {
   "name": "gen_enum",
   "id": "gen_enum",
-  "version": "0.1.5",
+  "version": "0.2.0-obsolete",
   "description": "A simple utility for generating an enum object with a string contains enum keys",
   "keywords": [
     "enum"
@@ -16,7 +16,8 @@
     "url": "https://github.com/greenlaw110/enumjs/issues"
   },
   "dependencies": {
-    "lodash": "^3.6.0"
+    "lodash": "^3.6.0",
+    "JSON": "*"
   },
   "main": "./gen_enum.js",
   "engines": {
@@ -41,7 +42,6 @@
     "should": "*",
     "gulp-rename": "*",
     "gulp-replace": "*",
-    "del": "*",
-    "JSON": "*"
+    "del": "*"
   }
 }

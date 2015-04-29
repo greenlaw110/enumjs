@@ -3,12 +3,13 @@ var should = require('should');
 var JSON = require('JSON');
 var genEnum = require('../TESTSRC');
 
+
 describe('genEnum', function() {
 
   var MyEnum;
 
   beforeEach(function() {
-    MyEnum = genEnum('Key1 Key2');
+    MyEnum = genEnum.enum('Key1 Key2');
   });
 
   describe('#_id', function() {
@@ -43,7 +44,7 @@ describe('genEnum', function() {
 
   describe('#CamelCase', function() {
     it('should transform words into CamelCase for isXxx function on Enum keys', function() {
-      var Foo = genEnum('SIGN_IN, SIGN_UP');
+      var Foo = genEnum.enum('SIGN_IN, SIGN_UP');
       Foo.SIGN_UP.should.have.property('isSignUp').type('function');
       Foo.SIGN_UP.should.have.property('isSignIn').type('function');
       Foo.SIGN_UP.should.not.have.property('isSIGN_IN');
@@ -66,7 +67,7 @@ describe('genEnum', function() {
 
   describe('input variations', function() {
     it('should be able to specify enum keys by other separator', function() {
-      var Foo = genEnum('Foo,Bar;Zee:Tuu');
+      var Foo = genEnum.enum('Foo,Bar;Zee:Tuu');
       Foo.should.have.property('Foo').Object;
       Foo.should.have.property('Bar').Object;
       Foo.should.have.property('Zee').Object;
@@ -74,13 +75,13 @@ describe('genEnum', function() {
     });
 
     it('should be able to specify enum keys by String array', function() {
-      var Foo = genEnum(['Foo', 'Bar']);
+      var Foo = genEnum.enum(['Foo', 'Bar']);
       Foo.should.have.property('Foo').Object;
       Foo.should.have.property('Bar').Object;
     });
 
     it('should be able to specify enum keys by Object', function() {
-      var Foo = genEnum({
+      var Foo = genEnum.enum({
         Foo: null,
         Bar: null
       });
@@ -89,7 +90,7 @@ describe('genEnum', function() {
     });
 
     it('should be able to specify enum keys by argument array', function() {
-      var Foo = genEnum('Foo', 'Bar');
+      var Foo = genEnum.enum('Foo', 'Bar');
       Foo.should.have.property('Foo').Object;
       Foo.should.have.property('Bar').Object;
     });
@@ -99,33 +100,105 @@ describe('genEnum', function() {
   describe('invalid inputs', function() {
 
     it('should throw exception if input is a number', function() {
-      assert.throws(function() {genEnum(5);}, 'Argument must be a string or an array of strings.');
+      assert.throws(function() {genEnum.enum(5);}, 'Argument must be a string or an array of strings.');
     });
 
     it('should throw exception if input array contains element that is not a string', function() {
-      assert.throws(function() {genEnum(['Foo', 5]);}, 'bad enum key: 5');
-      assert.throws(function() {genEnum(['Foo', false]);}, 'bad enum key: 5');
+      assert.throws(function() {genEnum.enum(['Foo', 5]);}, 'bad enum key: 5');
+      assert.throws(function() {genEnum.enum(['Foo', false]);}, 'bad enum key: 5');
     });
 
     it('should throw excpetion if key string is not a valid enum key name', function() {
-      assert.throws(function() {genEnum('Foo 5');}, 'bad enum key: 5');
+      assert.throws(function() {genEnum.enum('Foo 5');}, 'bad enum key: 5');
     });
 
   });
 
-  // describe('JSON Serialize/Deserialize', function() {
+  describe('JSON Serialize/Deserialize', function() {
+    it('should be working after JSON serialize', function() {
+      var o = {
+        flag: MyEnum.Key1,
+        name: 'foo'
+      }
+      var s = JSON.stringify(o);
+      //o = JSON.parse(s);
+      o = genEnum.unJSON(s);
+      var Key1 = o.flag;
 
-  //   it('should be working after JSON serialize', function() {
-  //     var s = JSON.stringify(MyEnum.Key1);
-  //     var Key1 = JSON.parse(s);
+      assert.equal('Key1', Key1._id);
+      assert.equal('Key1', Key1.name());
+      assert.equal('Key1', Key1.toString());
+      assert.equal(true, Key1.isKey1());
+      assert.equal(false, Key1.isKey2());
+    })
 
-  //     assert.equal('Key1', Key1._id);
-  //     assert.equal('Key1', Key1.name());
-  //     assert.equal('Key1', Key1.toString());
-  //     assert.equal(true, Key1.isKey1());
-  //     assert.equal(false, Key1.isKey2());
-  //   })
-
-  // })
+  })
 
 });
+
+describe('genConst', function() {
+  
+  var MyConst;
+
+  beforeEach(function() {
+    MyConst = genEnum.const("Key1 Key2");
+  });
+
+  describe('#const', function() {
+    it('should generate constants with value matches keys', function() {
+      assert.equal('Key1', MyConst.Key1);
+      assert.equal('Key2', MyConst.Key2);
+    })
+  });
+
+  describe('immutability', function() {
+    it('shall not change constants once it is generated', function() {
+      MyConst.Key1 = 'ABC';
+      assert.notEqual('ABC', MyConst.Key1);
+      assert.equal('Key1', MyConst.Key1);
+
+      MyConst.Key3 = 'Key3';
+      MyConst.should.not.have.property('Key3');
+
+      delete MyConst.Key2;
+      MyConst.should.have.property('Key2');
+    });
+  });
+
+});
+
+describe('Bitmap', function() {
+  
+  var MyBitmap;
+
+  beforeEach(function() {
+    MyBitmap = genEnum.bitmap('Key1, Key2');
+  });
+
+  describe('#bitmap', function() {
+    it('should create bitmap with value default to false', function() {
+      assert.equal(false, MyBitmap.Key1);
+      assert.equal(false, MyBitmap.Key2);
+    });
+  });
+
+  describe('default value: ', function() {
+
+    it('should create bitmap with value equals to the default value', function() {
+      var Bitmap = genEnum.bitmap(true, 'Key1, Key2');
+      assert.equal(true, Bitmap.Key1);
+      assert.equal(true, Bitmap.Key2);
+    });
+
+
+    it('the default value shall not override specified value', function() {
+      var Bitmap = genEnum.bitmap(true, {
+        Key1: false,
+        Key2: true
+      });
+      assert.equal(false, Bitmap.Key1);
+      assert.equal(true, Bitmap.Key2);
+    })
+  });
+
+})
